@@ -16,6 +16,7 @@
  * the BinaryNode are isRoot, leftChild, rightChild
  *
  */
+ 
 
 class BinaryNode //: public Node
 {
