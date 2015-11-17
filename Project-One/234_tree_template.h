@@ -49,19 +49,33 @@ private:
   class Node234
   {
   public:
-    DataType data[4];
+    DataType data[3];
     Node234 * left;
     Node234 * right;
+    Node234 * lmiddle;
+    Node234 * rmiddle;
 
     Node234()
-      : left(0), right(0)
-    {}
+    {
+      data[0] = 0;
+	  data[1] = 0;
+	  data[2] = 0;
+      left = 0;
+      right = 0;
+      lmiddle = 0;
+      rmiddle = 0;
+    }
 
     Node234(DataType item, int position)
     {
+	  data[0] = 0;
+	  data[1] = 0;
+	  data[2] = 0;
       data[position] = item;
       left = 0;
       right = 0;
+      lmiddle = 0;
+      rmiddle = 0;
     }
   };
 
@@ -148,27 +162,133 @@ inline void tree<DataType>::insert(const DataType & item)
 {
   Pointer234
     locptr = myRoot,   // search pointer
-    parent = 0;        // pointer to parent of current node
+    parent = 0,        // pointer to parent of current node
+    grandparent = 0,   // pointer to grandparent of the current node
+	child = 0,
+	newNode = 0;
+  int numItems = 0;
   bool found = false;     // indicates if item already in BST
   while (!found && locptr != 0)
   {
+	grandparent = parent;
     parent = locptr;
-    if (item < locptr->data[0])       // descend left
-      locptr = locptr->left;
-    else if (locptr->data[0] < item)  // descend right
-      locptr = locptr->right;
-    else                           // item found
-      found = true;
+	child = locptr;
+    for (int i = 0; i < 3; i++)         //Search the node for the data, as well as find the number of items in the node
+    {
+      if (item == locptr->data[i])
+      {
+        found = true;                   // item found
+      }
+      else if (locptr->data[i] != 0)
+      {
+        numItems++;
+      }
+    }
+	if (numItems == 3)
+	{
+      newNode = new Node234(locptr->data[2], 0);
+	  locptr->data[2] = 0;
+	  if (grandparent == 0)
+	  {
+        grandparent = new Node234(locptr->data[1], 0);
+		myRoot = grandparent;
+        grandparent->left = locptr;
+        locptr->data[1] = 0;
+	  }
+	  else
+	  {
+        grandparent->data[1] = locptr->data[1];
+		locptr->data[1] = 0;
+	  }
+	  grandparent->lmiddle = newNode;
+	  newNode->left = locptr->rmiddle;
+	  newNode->lmiddle = locptr->right;
+	  locptr->rmiddle = 0;
+	  locptr->right = 0;
+	  child = newNode->left;
+	  if(item < locptr->data[0])
+	  {
+        locptr = locptr->left;
+	  }
+	  else if (item > newNode->data[0])
+	  {
+        locptr = newNode->lmiddle;
+	  }
+	  else if (item > child->data[0])
+	  {
+        locptr = newNode->left;
+	  }
+	  else
+	  {
+        locptr = locptr->lmiddle;
+	  }
+	}
+    else if (numItems == 1)
+    {
+      if (item < locptr->data[0])       // descend left
+      {
+        locptr = locptr->left;
+      }
+      else                              // descend left-middle
+      {
+        locptr = locptr->lmiddle;
+      }
+    }
+    else if (numItems == 2)
+    {
+      if (item < locptr->data[0])       // descend left
+      {
+        locptr = locptr->left;
+      }
+      else if (item < locptr->data[1])  // descend left-middle
+      {
+        locptr = locptr->lmiddle;
+      }
+      else                              // descend right-middle
+      {
+        locptr = locptr->rmiddle;
+      }
+    }
   }
   if (!found)
   {                                 // construct node containing item
-    locptr = new Node234(item, 0);
-    if (parent == 0)               // empty tree
+    if (numItems == 0)
+    {
+      locptr = new Node234(item, 0);
       myRoot = locptr;
-    else if (item < parent->data[0])  // insert to left of parent
-      parent->left = locptr;
-    else                           // insert to right of parent
-      parent->right = locptr;
+    }
+    else if (numItems == 2)
+    {
+      if (item < parent->data[0])
+	  {
+        newNode = new Node234(item, 0);
+		parent->left = newNode;
+	  }
+      else 
+	  {
+        if (item < parent->data[1])
+		{
+		  newNode = new Node234(item, 0);
+		  parent->lmiddle = newNode;
+		}
+		else
+		{
+		  parent->data[2] = item;
+		}
+	  }
+	}
+	else
+	{
+      if (item < parent->data[0])
+      {
+		newNode = new Node234(item, 0);
+		parent->left = newNode;
+      }
+      else
+	  {
+		parent->data[1] = item;
+	  }
+	}
   }
   else
     cout << "Item already in the tree\n";
@@ -284,7 +404,7 @@ void tree<DataType>::graphAux(ostream & out, int indent,
   if (subtreeRoot != 0)
   {
     graphAux(out, indent + 8, subtreeRoot->right);
-    out << setw(indent) << " " << subtreeRoot->data[0] << endl;
+    out << setw(indent) << " " << subtreeRoot->data[0] << " " << subtreeRoot->data[1] << " " << subtreeRoot->data[2] << endl;
     graphAux(out, indent + 8, subtreeRoot->left);
   }
 }
