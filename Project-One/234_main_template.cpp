@@ -6,7 +6,7 @@ names will need to be changed for 2-3-4 tree.					**********/
 #include <iostream>
 using namespace std;
 
-#include "234_tree_template.h"
+#include "234tree.h"
 
 int main()
 {
@@ -17,7 +17,7 @@ int main()
 
 
   //Ask user for items to insert
-  //Insert items
+  //Inser items
   //Display tree
   cout << "\nNow insert a bunch of integers into the 234 tree."
     "\nTry items not in the 234 tree and some that are in it:\n";
@@ -30,14 +30,14 @@ int main()
     inttree.insert(number);
   }
   inttree.graph(cout);
-  inttree.inorder(cout);
+  //inttree.inorder(cout);
 
   cout << endl;
 
   //Ask user for an item to delete
   //Delete item
   //Display new tree
-  cout << "\nNow testing the remove() operation."
+  /*cout << "\nNow testing the remove() operation."
     "\nTry both items in the 234 tree and some not in it:\n";
   for (;;)
   {
@@ -50,4 +50,5 @@ int main()
   cout << "\nInorder Traversal of 234 tree: \n";
   inttree.inorder(cout);
   cout << endl;
+  */
 }
