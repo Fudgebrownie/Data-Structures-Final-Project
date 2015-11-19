@@ -164,15 +164,15 @@ inline void tree<DataType>::insert(const DataType & item)
     locptr = myRoot,   // search pointer
     parent = 0,        // pointer to parent of current node
     grandparent = 0,   // pointer to grandparent of the current node
-	child = 0,
-	newNode = 0;
+	  child = 0,
+	  newNode = 0;
   int numItems = 0;
   bool found = false;     // indicates if item already in BST
   while (!found && locptr != 0)
   {
-	grandparent = parent;
+	  grandparent = parent;
     parent = locptr;
-	child = locptr;
+	  child = locptr;
     for (int i = 0; i < 3; i++)         //Search the node for the data, as well as find the number of items in the node
     {
       if (item == locptr->data[i])
@@ -184,45 +184,47 @@ inline void tree<DataType>::insert(const DataType & item)
         numItems++;
       }
     }
-	if (numItems == 3)
-	{
-      newNode = new Node234(locptr->data[2], 0);
-	  locptr->data[2] = 0;
-	  if (grandparent == 0)
+	  if (numItems == 3)                  //Upon encountering  a full node, split it
 	  {
+      newNode = new Node234(locptr->data[2], 0);
+  	  locptr->data[2] = 0;
+	    if (grandparent == 0)             //If the current node is the root
+	    {
         grandparent = new Node234(locptr->data[1], 0);
-		myRoot = grandparent;
+		    myRoot = grandparent;
         grandparent->left = locptr;
         locptr->data[1] = 0;
-	  }
-	  else
-	  {
+	    }
+	    else
+	    {
         grandparent->data[1] = locptr->data[1];
-		locptr->data[1] = 0;
-	  }
-	  grandparent->lmiddle = newNode;
-	  newNode->left = locptr->rmiddle;
-	  newNode->lmiddle = locptr->right;
-	  locptr->rmiddle = 0;
-	  locptr->right = 0;
-	  child = newNode->left;
-	  if(item < locptr->data[0])
-	  {
+		    locptr->data[1] = 0;
+	    }
+	    grandparent->lmiddle = newNode;
+	    newNode->left = locptr->rmiddle;
+	    newNode->lmiddle = locptr->right;
+	    locptr->rmiddle = 0;
+	    locptr->right = 0;
+	    child = newNode->left;
+	    if(item < locptr->data[0])
+	    {
         locptr = locptr->left;
-	  }
-	  else if (item > newNode->data[0])
-	  {
+	    }
+	    else if (item > newNode->data[0])
+	    {
+        parent = newNode;
         locptr = newNode->lmiddle;
-	  }
-	  else if (item > child->data[0])
-	  {
+	    }
+	    else if (item > grandparent->data[0])
+	    {
+        parent = newNode;
         locptr = newNode->left;
-	  }
-	  else
-	  {
+	    }
+	    else
+	    {
         locptr = locptr->lmiddle;
+	    }
 	  }
-	}
     else if (numItems == 1)
     {
       if (item < locptr->data[0])       // descend left
@@ -251,47 +253,58 @@ inline void tree<DataType>::insert(const DataType & item)
     }
   }
   if (!found)
-  {                                 // construct node containing item
-    if (numItems == 0)
+  {                                   // Add item to tree
+    if (numItems == 0)                //If no nodes exist
     {
       locptr = new Node234(item, 0);
       myRoot = locptr;
     }
-    else if (numItems == 2)
+    else
     {
-      if (item < parent->data[0])
-	  {
-        newNode = new Node234(item, 0);
-		parent->left = newNode;
-	  }
-      else 
-	  {
-        if (item < parent->data[1])
-		{
-		  newNode = new Node234(item, 0);
-		  parent->lmiddle = newNode;
-		}
-		else
-		{
-		  parent->data[2] = item;
-		}
-	  }
-	}
-	else
-	{
-      if (item < parent->data[0])
+      numItems = 0;
+      for (int i = 0; i < 3; i++)     //Count the number of items in the current node
       {
-		newNode = new Node234(item, 0);
-		parent->left = newNode;
+        if (parent->data[i] != 0)
+        {
+          numItems++;
+        }
       }
-      else
-	  {
-		parent->data[1] = item;
-	  }
-	}
+      if (numItems == 2)              //If 2
+      {
+        if (item < parent->data[0])
+        {
+          parent->data[2] = parent->data[1];
+          parent->data[1] = parent->data[0];
+          parent->data[0] = item;
+        }
+        else if (item < parent->data[1])
+        {
+          parent->data[2] = parent->data[1];
+          parent->data[1] = item;
+        }
+        else
+        {
+          parent->data[2] = item;
+        }
+      }
+      else                            //If 1
+      {
+        if (item < parent->data[0])
+        {
+          parent->data[1] = parent->data[0];
+          parent->data[0] = item;
+        }
+        else
+        {
+          parent->data[1] = item;
+        }
+      }
+    }
   }
   else
+  {
     cout << "Item already in the tree\n";
+  }
 }
 
 //--- Definition of remove()
