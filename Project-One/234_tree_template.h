@@ -6,6 +6,8 @@ though there's probably a lot we need to change here.				*****/
 array, so I figured I'd upload what I've got. I know it's not much, but
 blame the Physics homework I almost forgot to do.   */
 
+/*AS: I've been working on display function, attempting to convert our red-black display to work with a 234 tree.   */
+
 #include <iostream>
 
 #ifndef TWO_THREE_FOUR_TREE
