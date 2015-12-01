@@ -7,11 +7,11 @@ int main()
 {
 	const char LINE[] = "---------------------------------------------------";
 	int number, value, choice;
-    char another;
+    	char another;
 
     // Prompt for how many trees to create
-    cout << "How many BSTs do you want to create?";
-    cin >> number;
+    	cout << "How many BSTs do you want to create?";
+    	cin >> number;
 	while (number < 1)
 	{
 		cout << "You can't have zero trees." << endl;
@@ -19,12 +19,12 @@ int main()
 		cin >> number;
 	}
         
-    //Create tree object array
-    Tree* trees = new Tree[number];
+    	//Create tree object array
+    	Tree* trees = new Tree[number];
     
-    // Loop through trees
-    for (int i = 0; i < number; i++)
-    {
+	 // Loop through trees
+	for (int i = 0; i < number; i++)
+    	{
         // Allow insertion into trees
 		cout << endl << LINE << endl;
         do
@@ -45,7 +45,7 @@ int main()
 		cout << endl << LINE << endl;
         cout << endl << "Tree " << i + 1 << " will now be displayed." << endl << endl;
         trees[i].display();
-    }
+    	}
     
     // Create a forest and display it
 	Forest forest;
@@ -129,8 +129,8 @@ int main()
 		cin >> another;
 	} while (another == 'Y' || another == 'y');
 
-    // Deallocation
-    delete[] trees;
+    	// Deallocation
+    	delete[] trees;
 	cout << endl << LINE << endl;
 	cout << endl << "The tree objects have been deallocated from memory." << endl;
 }
