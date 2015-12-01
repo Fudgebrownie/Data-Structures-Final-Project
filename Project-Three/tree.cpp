@@ -18,8 +18,8 @@ void Tree::deleteRecursive(Node* node)
 {
     if (node != NULL)
     {
-		deleteRecursive(node->left);
-		deleteRecursive(node->right);
+	deleteRecursive(node->left);
+	deleteRecursive(node->right);
         delete node;
     }
 }
@@ -36,8 +36,8 @@ bool Tree::search(int value)
     Node* current = root;
     while (current != NULL)
     {
-		if (current->data == value)
-			return true;
+	if (current->data == value)
+		return true;
 
         if (value < current->data)
             current = current->left;
@@ -54,7 +54,7 @@ void Tree::insert(int value)
     Node* parent = NULL;
     while (current != NULL)
     {
-		if (current->data == value)
+	if (current->data == value)
         {
 			cout << "Error: Unable to insert " << value << " because it is already in the tree." << endl;
 			return;
