@@ -5,7 +5,11 @@
 
 class Forest : public Tree
 {
+    private:
+		void insertRecursive(Node* source, Node* destination);
 
+    public:
+        void addTree(Tree& tree);
 };
 
 #endif
